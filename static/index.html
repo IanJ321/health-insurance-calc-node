@@ -5,6 +5,22 @@
     <title>Health Insurance Calc API Test</title>
 </head>
 <body>
-    
+    <h1>Health Insurance Calculator REST API Testing</h1>
+    <p>This tests the RESTful APIs in the Node.js server,
+    used for the Health Insurance Calculator group project</p>
+    <button id="wakeButton">Test Wake API</button>
+    <p id="result">Test results will appear here.</p>
+    <script>
+        const result = document.getElementById("result")
+        document.getElementById("wakeButton").addEventListener("click", async () => {
+			try {
+				const response = await fetch("/wakeAPI")
+				const data = await response.json()
+				result.textContent = data.message
+			} catch (error) {
+				result.textContent = "Error: " + error.message
+			}
+		})
+    </script>
 </body>
 </html>

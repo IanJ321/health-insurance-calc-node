@@ -1,0 +1,15 @@
+{
+    "name": "health-insurance-calc-node",
+    "description": "Server-side API handler for Health Insurance Calculator group project",
+    "version": "0.0.1",
+    "private": true,
+    "license": "MIT",
+    "author": "Microsoft",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "dependencies": {
+        "cors": "^2.8.6",
+        "express": "^4.18.2"
+    }
+}
