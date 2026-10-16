@@ -8,15 +8,17 @@
     <h1>Health Insurance Calculator REST API Testing</h1>
     <p>This tests the RESTful APIs in the Node.js server,
     used for the Health Insurance Calculator group project</p>
-    <br>
     
-    <!--API Result Output-->
+    <!--
+    API Result Output
     <p id="result">Test results will appear here.</p>
+    -->
 
-    <!--Wake API Test-->
+    <!--Wake API-->
     <h2>Wake API</h2>
     <button id="wakeButton">Test Wake API</button>
-    <br><br><br>
+    <p id="result">API activeness status will appear here.</p>
+    <br>
 
     <!--Blood Pressure API-->
     <h2>Blood Pressure</h2>
@@ -35,7 +37,8 @@
         <option value="stage2">Hypertension Stage 2</option>
         <option value="crisis">Hypertensive Crisis</option>
     </select>
-    <br><br>
+    <p id="bpResult">Blood pressure category selection will appear here.</p>
+    <br>
     
     <!--BMI Calculation API-->
     <h2>BMI</h2>
@@ -47,8 +50,9 @@
     <label for="pounds">Weight (lbs)</label>
     <input type="number" id="pounds" placeholder="Enter weight in lbs">
     <br><br>
-    <button id="calculate">Calculate BMI</button>
-    <br><br>
+    <button id="calculateBMI">Calculate BMI</button>
+    <p id="bmiResult">BMI calculation will appear here.</p>
+    <br>
 
     <!--Risk Calculation API-->
     <h2>Risk Calculation</h2>
@@ -69,7 +73,8 @@
         Alzheimer's
     </label>
     <br><br>
-    <p id="pointsResult">Complete the form to calculate your risk score.</p>
+    <button id="calculatePoints">Calculate Risk Points</button>
+    <p id="riskResult">Final risk score will appear here.</p>
 
     <!--JS File Testing-->
     <script>
@@ -93,7 +98,7 @@
         bpCategory.addEventListener("change", async () => {
             if (!bpCategory.value) {
                 bpResult.textContent = 
-                    "Select a category to view its reference range"
+                    "Select a blood pressure category."
                 return
             }
             const response = await fetch("/bpCategoriesAPI", {
@@ -106,10 +111,13 @@
                 })
             })
             const data = await response.json()
-            bpResult.textContent = `${data.name}: ${data.range}`
+            window.bpLatest = bpCategory.value
+            bpResult.textContent = `You selected: ${data.name} (${data.range})`
         })
         
         // BMI API
+        const bmiResult = document.getElementById("bmiResult")
+
         const feetSelect = document.getElementById("feet")
         const inchesSelect = document.getElementById("inches")
         const poundsInput = document.getElementById("pounds")
@@ -121,10 +129,10 @@
             inchesSelect.add(new Option(inches, inches))
         }
 
-        feetSelect.value = "5"
-        inchesSelect.value = "10"
+        feetSelect.value = "in"
+        inchesSelect.value = "ft"
 
-        document.getElementById("calculate").addEventListener("click", async () => {
+        document.getElementById("calculateBMI").addEventListener("click", async () => {
             const response = await fetch("/bmiAPI", {
                 method: "POST",
                 headers: {
@@ -137,12 +145,35 @@
                 })
             })
             const data = await response.json()
-            result.textContent = `BMI: ${data.bmi}`
+            window.bmiLatest = data.bmi
+            bmiResult.textContent = `Your BMI: ${data.bmi}`
         })
 
         // Risk Calculation API
-        
+        const riskResult = document.getElementById("riskResult")
 
+        document.getElementById("calculatePoints")
+            .addEventListener("click", async () => {
+            const age = Number(document.getElementById("age").value)
+            const familyHistory = Array.from(document.querySelectorAll(
+                'input[name="familyHistory"]:checked'
+            )).map(input => input.value)
+
+            const bmi = window.bmiLatest
+            const bloodPressure = window.bpLatest
+
+            const response = await fetch("/riskCalculationAPI", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    age, bmi, bloodPressure, familyHistory
+                })
+            })
+            const data = await response.json()
+            riskResult.textContent = `Your final risk score is: ${data.totalPoints} points`
+        })
     </script>
 </body>
 </html>

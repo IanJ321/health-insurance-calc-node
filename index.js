@@ -61,49 +61,75 @@ app.post("/bmiAPI", (req, res) => {
     })
 })
 
-// Risk Category API
+// Risk Calculation API
 app.post("/riskCalculationAPI", (req, res) => {
     const {
         age, bmi, bloodPressure, familyHistory
     } = req.body
 
     let totalPoints = 0
-    const summary = {}
+    const points = {}
 
+    // Ask for age
     if (age < 30) {
-        summary.age = 0
+        points.age = 0
     } else if (age < 45) {
-        summary.age = 10
+        points.age = 10
     } else if (age < 60) {
-        summary.age = 20
+        points.age = 20
     } else {
-        summary.age = 30
+        points.age = 30
     }
-    totalPoints += summary.age
+    totalPoints += points.age
 
     if (bmi < 25) {
-        summary.bmi = 0
+        points.bmi = 0
     } else if (bmi < 30) {
-        summary.bmi = 30
+        points.bmi = 30
     } else {
-        summary.bmi = 75
+        points.bmi = 75
     }
-    totalPoints += summary.bmi
+    totalPoints += points.bmi
+
+    const bpPoints = {
+        normal: 0,
+        elevated: 15,
+        stage1: 30,
+        stage2: 75,
+        crisis: 100
+    }
+    points.bloodPressure = bpPoints[bloodPressure]
+    totalPoints += points.bloodPressure
+
+    // Check family history
+    const historyPoints = {
+        diabetes: 10,
+        cancer: 10,
+        alzheimers: 10
+    }
+    points.familyHistory = {}
+    familyHistory.forEach(disease => {
+        if (historyPoints[disease] !== undefined) {
+            points.familyHistory[disease] =
+                historyPoints[disease]
+            totalPoints += historyPoints[disease]
+        }
+    });
 
     res.json({
         totalPoints,
-        summary
+        points
     })
 })
 
-// Custom 404 page.
+// Custom 404 page
 app.use((req, res) => {
     res.type("text/plain")
     res.status(404)
     res.send("404 - Not Found")
 })
 
-// Custom 500 page.
+// Custom 500 page
 app.use((err, req, res, next) => {
     console.error(err.message)
     res.type("text/plain")
