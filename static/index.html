@@ -55,6 +55,21 @@
     <label for="age">Enter your age:</label>
     <input type="number" id="age" min="1" max="100" placeholder="Enter age">
     <br>
+    <h3>Family Disease History</h3>
+    <label>
+        <input type="checkbox" name="familyHistory" value="diabetes">
+        Diabetes
+    </label>
+    <label>
+        <input type="checkbox" name="familyHistory" value="cancer">
+        Cancer
+    </label>
+    <label>
+        <input type="checkbox" name="familyHistory" value="alzheimers">
+        Alzheimer's
+    </label>
+    <br><br>
+    <p id="pointsResult">Complete the form to calculate your risk score.</p>
 
     <!--JS File Testing-->
     <script>
@@ -91,8 +106,7 @@
                 })
             })
             const data = await response.json()
-            bpResult.textContent = 
-                `${data.name}: ${data.range}`
+            bpResult.textContent = `${data.name}: ${data.range}`
         })
         
         // BMI API
@@ -123,8 +137,7 @@
                 })
             })
             const data = await response.json()
-            result.textContent =
-                `BMI: ${data.bmi}`
+            result.textContent = `BMI: ${data.bmi}`
         })
 
         // Risk Calculation API

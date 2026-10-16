@@ -62,14 +62,38 @@ app.post("/bmiAPI", (req, res) => {
 })
 
 // Risk Category API
-app.post("riskCalculationAPI", (req, res) => {
+app.post("/riskCalculationAPI", (req, res) => {
     const {
-        age, bmi, bpCategory, familyHistory
+        age, bmi, bloodPressure, familyHistory
     } = req.body
 
     let totalPoints = 0
     const summary = {}
-    
+
+    if (age < 30) {
+        summary.age = 0
+    } else if (age < 45) {
+        summary.age = 10
+    } else if (age < 60) {
+        summary.age = 20
+    } else {
+        summary.age = 30
+    }
+    totalPoints += summary.age
+
+    if (bmi < 25) {
+        summary.bmi = 0
+    } else if (bmi < 30) {
+        summary.bmi = 30
+    } else {
+        summary.bmi = 75
+    }
+    totalPoints += summary.bmi
+
+    res.json({
+        totalPoints,
+        summary
+    })
 })
 
 // Custom 404 page.
