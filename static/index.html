@@ -1,3 +1,8 @@
+<!--
+    ChatGPT was used to set up data collection in HTML and write the script code for all APIs except the Wake API
+    The only changes to this code were to create unique variable names that align with those in the JS file
+-->
+    
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,7 +53,7 @@
     <select id="inches"></select>
     <br><br>
     <label for="pounds">Weight (lbs)</label>
-    <input type="number" id="pounds" placeholder="Enter weight in lbs">
+    <input type="number" id="pounds" min="50" max="700" placeholder="Enter weight in lbs">
     <br><br>
     <button id="calculateBMI">Calculate BMI</button>
     <p id="bmiResult">BMI calculation will appear here.</p>
@@ -59,6 +64,7 @@
     <label for="age">Enter your age:</label>
     <input type="number" id="age" min="1" max="100" placeholder="Enter age">
     <br>
+    <!--Family history w/ checkboxes-->
     <h3>Family Disease History</h3>
     <label>
         <input type="checkbox" name="familyHistory" value="diabetes">
@@ -129,8 +135,8 @@
             inchesSelect.add(new Option(inches, inches))
         }
 
-        feetSelect.value = "in"
-        inchesSelect.value = "ft"
+        feetSelect.value = "ft"
+        inchesSelect.value = "in"
 
         document.getElementById("calculateBMI").addEventListener("click", async () => {
             const response = await fetch("/bmiAPI", {

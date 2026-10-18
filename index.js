@@ -1,3 +1,9 @@
+/*
+    ChatGPT was used to setup the BMI and Risk Calculation APIS
+    This usage was mainly for math-based unit conversions and collecting data for family history
+    The output has been modified to make variable names more unique for easier reference
+*/
+
 const express = require("express")
 const cors = require("cors")
 const app = express()
@@ -67,6 +73,7 @@ app.post("/riskCalculationAPI", (req, res) => {
         age, bmi, bloodPressure, familyHistory
     } = req.body
 
+    // Track points between sections
     let totalPoints = 0
     const points = {}
 
