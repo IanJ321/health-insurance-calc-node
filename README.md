@@ -1,7 +1,7 @@
 # health-insurance-calc-node
 Team: OverFlowers
 
-Members: Ian Jung, Andres Bodington
+Members: Ian Jung, Andres Bodington, David Woloszczuk
 
 Project Name: Health Insurance Risk Calculator - Node.js
 
