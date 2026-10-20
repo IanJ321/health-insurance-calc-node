@@ -115,7 +115,7 @@ app.post("/riskCalculationAPI", (req, res) => {
         alzheimers: 10
     }
     points.familyHistory = {}
-    familyHistory.forEach(disease => {
+    ;(familyHistory || []).forEach(disease => {
         if (historyPoints[disease] !== undefined) {
             points.familyHistory[disease] =
                 historyPoints[disease]
@@ -123,11 +123,25 @@ app.post("/riskCalculationAPI", (req, res) => {
         }
     });
 
+    // Risk category (David - RC-012)
+    const riskCategory = getRiskCategory(totalPoints)
+    console.log(`riskCalculationAPI: ${totalPoints} points -> ${riskCategory}`)
+
     res.json({
         totalPoints,
+        riskCategory,
         points
     })
 })
+
+// Convert total risk points into a risk category
+// <= 20 low, <= 50 moderate, <= 75 high, > 75 uninsurable
+function getRiskCategory(totalPoints) {
+    if (totalPoints <= 20) return "low risk"
+    if (totalPoints <= 50) return "moderate risk"
+    if (totalPoints <= 75) return "high risk"
+    return "uninsurable"
+}
 
 // Custom 404 page
 app.use((req, res) => {

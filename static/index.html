@@ -178,7 +178,7 @@
                 })
             })
             const data = await response.json()
-            riskResult.textContent = `Your final risk score is: ${data.totalPoints} points`
+            riskResult.textContent = `Your final risk score is: ${data.totalPoints} points (${data.riskCategory})`
         })
     </script>
 </body>
